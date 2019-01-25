@@ -1,0 +1,9 @@
+/orchis
+/build
+/out
+/node_modules
+/target
+/.lsp
+/.cljs_node_repl
+/.lein-repl-history
+/.nrepl-port
