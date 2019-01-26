@@ -37,4 +37,6 @@
                                    :output-dir "build/js"
                                    :optimizations :advanced
                                    :target :nodejs
-                                   :source-map "build/main.js.map"}}]})
+                                   :source-map "build/main.js.map"}}]}
+  :profiles {:dev {:dependencies [[org.clojure/tools.namespace "0.2.11"]]
+                   :source-paths ["dev"]}})

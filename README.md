@@ -78,8 +78,7 @@ To run cljs repl,
 or
 
     $ lein repl
-    user=> (require '[cljs.repl :as repl] '[cljs.repl.node :as node])
-    user=> (repl/repl (node/repl-env))
+    user=> (dev)
     ClojureScript 1.10.439
     cljs.user=>
 
