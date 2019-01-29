@@ -6,10 +6,14 @@
 (def simple-git
   (nodejs/require "simple-git"))
 
+(def cwd
+  (-> nodejs/process
+      .cwd))
+
 (defn log [option]
   (let [ch (chan)]
     (go
-      (-> (simple-git (.cwd nodejs/process))
+      (-> (simple-git cwd)
           (.log (clj->js option)
                 (fn [err out]
                   (go
@@ -41,9 +45,47 @@
         (async/close! ch)))
     ch))
 
+(defn latest-tag []
+  (let [ch (chan)]
+    (go
+      (-> (simple-git cwd)
+          (.raw
+            (clj->js ["describe"
+                      "--abbrev=0"
+                      "--tags"])
+            (fn [err out]
+              (go
+                (->> {:out out
+                      :err err}
+                     (>! ch))
+                (async/close! ch))))))
+    ch))
+
+(defn diff
+  ([]
+   (diff []))
+  ([opts]
+   (let [ch (chan)]
+     (go
+       (-> (simple-git cwd)
+           (.diff (clj->js opts)
+                  (fn [err out]
+                    (go
+                      (->> {:out out
+                            :err err}
+                           (>! ch))
+                      (async/close! ch))))))
+     ch)))
+
 (comment
   (go
     (println (<! (latest-log))))
+  (go
+    (println (<! (latest-tag))))
+  (go
+    (println (<! (diff ["HEAD^^"]))))
+  (go
+    (println (<! (diff))))
 )
 
 
