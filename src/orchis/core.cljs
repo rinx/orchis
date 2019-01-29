@@ -2,6 +2,7 @@
   (:require [cljs.nodejs :as nodejs]
             [clojure.tools.cli :refer [parse-opts]]
             [cljs.core.async :refer [chan <! >!] :as async]
+            [orchis.command.runner :as command.runner]
             [orchis.command.git :as command.git])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 

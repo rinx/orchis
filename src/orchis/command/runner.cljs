@@ -34,7 +34,8 @@
 (defn data->ch-fn [ch]
   (fn [data]
     (go
-      (>! ch data))))
+      (>! ch data)
+      (async/close! ch))))
 
 (defn spawn->ch [command args]
   (let [ps (spawn command args)

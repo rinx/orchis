@@ -9,30 +9,36 @@
 (defn log [option]
   (let [ch (chan)]
     (go
-      (-> (simple-git)
+      (-> (simple-git (.cwd nodejs/process))
           (.log (clj->js option)
                 (fn [err out]
                   (go
                     (->> {:out out
                           :err err}
-                         (>! ch)))))))
+                         (>! ch))
+                    (async/close! ch))))))
     ch))
 
 (defn parse-log [log]
-  {:hash (.-hash log)
-   :date (.-date log)
-   :message (.-message log)
-   :author-name (.-author_name log)
-   :author-email (.-author_email log)})
+  (when-not (nil? log)
+    {:hash (.-hash log)
+     :date (.-date log)
+     :message (.-message log)
+     :author-name (.-author_name log)
+     :author-email (.-author_email log)}))
 
 (defn latest-log []
   (let [ch (chan)]
     (go
       (let [logs (<! (log {}))
             latest (-> (get logs :out)
-                       (.-latest)
+                       (.-all)
+                       (js->clj)
+                       (first)
                        (parse-log))]
-        (>! ch latest)))
+        (when-not (nil? latest)
+          (>! ch latest))
+        (async/close! ch)))
     ch))
 
 (comment
