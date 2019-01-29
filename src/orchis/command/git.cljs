@@ -10,17 +10,20 @@
   (-> nodejs/process
       .cwd))
 
+(defn standard-handler [ch]
+  (fn [err out]
+    (go
+      (->> {:out out
+            :err err}
+           (>! ch))
+      (async/close! ch))))
+
 (defn log [option]
   (let [ch (chan)]
     (go
       (-> (simple-git cwd)
           (.log (clj->js option)
-                (fn [err out]
-                  (go
-                    (->> {:out out
-                          :err err}
-                         (>! ch))
-                    (async/close! ch))))))
+                (standard-handler ch))))
     ch))
 
 (defn parse-log [log]
@@ -53,29 +56,24 @@
             (clj->js ["describe"
                       "--abbrev=0"
                       "--tags"])
-            (fn [err out]
-              (go
-                (->> {:out out
-                      :err err}
-                     (>! ch))
-                (async/close! ch))))))
+            (standard-handler ch))))
     ch))
 
-(defn diff
-  ([]
-   (diff []))
-  ([opts]
-   (let [ch (chan)]
-     (go
-       (-> (simple-git cwd)
-           (.diff (clj->js opts)
-                  (fn [err out]
-                    (go
-                      (->> {:out out
-                            :err err}
-                           (>! ch))
-                      (async/close! ch))))))
-     ch)))
+(defn diff [& opts]
+  (let [ch (chan)]
+    (go
+      (-> (simple-git cwd)
+          (.diff (clj->js opts)
+                 (standard-handler ch))))
+    ch))
+
+(defn tag [& args]
+  (let [ch (chan)]
+    (go
+      (-> (simple-git cwd)
+          (.tag (clj->js args)
+                (standard-handler ch))))
+    ch))
 
 (comment
   (go
