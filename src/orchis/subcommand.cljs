@@ -22,7 +22,7 @@
       (async/close! ch))
     ch))
 
-(defn semver-tag-push [args]
+(defn semver-tag-push [options]
   (let [ch (chan)
         remote (get options :remote)]
     (go
