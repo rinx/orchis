@@ -102,6 +102,25 @@
         (async/close! ch)))
     ch))
 
+(defn simple-semver [t]
+  (let [ch (chan)]
+    (go
+      (let [latest-tag (-> (<! (fetch-latest-tag))
+                           (or default-version-str)
+                           (string/trim-newline))
+            version (str->version latest-tag)
+            new-version (case t
+                          :major (bump-major version)
+                          :minor (bump-minor version)
+                          :patch (bump-patch version)
+                          nil)]
+        (when (some? new-version)
+          (->> new-version
+               (version->str)
+               (>! ch)))
+        (async/close! ch)))
+    ch))
+
 (comment
   (str->version "1.2.3")
   (version->str {:major 1 :minor 2 :patch 3})

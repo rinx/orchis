@@ -17,7 +17,8 @@
         "Subcommands:"
         "  semver             commit-comment based semantic versioning"
         "  semver-tag         semver and tagging"
-        "  semver-tag-push    semver, tagging and pushtags"]
+        "  semver-tag-push    semver, tagging and pushtags"
+        "  simple-semver      simply returns bumped version"]
        (string/join "\n")))
 
 (def options-spec
@@ -47,6 +48,8 @@
                                       (<! (subcommand/semver-tag)))
         (= subcommand "semver-tag-push") (runsc
                                            (<! (subcommand/semver-tag-push options)))
+        (= subcommand "simple-semver") (runsc
+                                         (<! (subcommand/simple-semver sargs)))
         :else (exit 1 (usage summary))))))
 
 (defn -main []

@@ -1,6 +1,7 @@
 (ns orchis.command.git
   (:require [cljs.nodejs :as nodejs]
-            [cljs.core.async :refer [chan <! >!] :as async])
+            [cljs.core.async :refer [chan <! >!] :as async]
+            [orchis.command.runner :as runner])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (def simple-git
@@ -51,6 +52,17 @@
 (defn latest-tag []
   (let [ch (chan)]
     (go
+      (let [spawn-ps (runner/spawn->ch "git" ["describe"
+                                       "--abbrev=0"
+                                       "--tags"])
+            code (-> (get spawn-ps :codech)
+                     (<!)
+                     (js/parseInt))]
+        (if (= code 0)
+          (>! ch {:out (<! (get spawn-ps :outch))})
+          (>! ch {:err (<! (get spawn-ps :errch))}))
+        (async/close! ch)))
+    #_(go
       (-> (simple-git cwd)
           (.raw
             (clj->js ["describe"
