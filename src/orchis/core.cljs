@@ -15,9 +15,9 @@
         options-summary
         ""
         "Subcommands:"
-        "  semver             semantic versioning"
-        "  semver-tag         versioning and tagging"
-        "  semver-tag-push    versioning, tagging and pushtags"]
+        "  semver             commit-comment based semantic versioning"
+        "  semver-tag         semver and tagging"
+        "  semver-tag-push    semver, tagging and pushtags"]
        (string/join "\n")))
 
 (def options-spec
