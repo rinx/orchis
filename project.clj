@@ -11,7 +11,8 @@
                  [org.clojure/spec.alpha "0.1.143"]
                  [org.clojure/core.async "0.4.490"]
                  [io.nervous/cljs-nodejs-externs "0.2.0"]
-                 [org.clojure/tools.cli "0.4.1"]]
+                 [org.clojure/tools.cli "0.4.1"]
+                 [com.taoensso/timbre "4.10.0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-npm "0.6.2"]
