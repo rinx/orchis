@@ -87,18 +87,18 @@
         (when new-version
           (let [{out :out err :err} (<! (command.git/tag new-version))]
             (when (and (nil? err) (some? out))
-              (>! ch out))))
+              (>! ch new-version))))
         (async/close! ch)))
     ch))
 
 (defn semver-tag-push [remote]
   (let [ch (chan)]
     (go
-      (let [{out :out err :err} (<! (semver-tag))]
-        (when out
+      (let [{new-version :out err :err} (<! (semver-tag))]
+        (when new-version
           (let [{out :out err :err} (<! (command.git/push-tags remote))]
             (when (and (nil? err) (some? out))
-              (>! ch out))))
+              (>! ch new-version))))
         (async/close! ch)))
     ch))
 

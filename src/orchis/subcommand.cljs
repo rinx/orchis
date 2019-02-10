@@ -9,7 +9,9 @@
 (defn semver []
   (let [ch (chan)]
     (go
-      (println (<! (step.semver/semver)))
+      (let [res (<! (step.semver/semver))]
+        (when (some? res)
+          (println res)))
       (>! ch {:code 0})
       (async/close! ch))
     ch))
@@ -17,7 +19,9 @@
 (defn semver-tag []
   (let [ch (chan)]
     (go
-      (println (<! (step.semver/semver-tag)))
+      (let [res (<! (step.semver/semver-tag))]
+        (when (some? res)
+          (println res)))
       (>! ch {:code 0})
       (async/close! ch))
     ch))
@@ -27,8 +31,9 @@
         remote (get options :remote)]
     (go
       (if (some? remote)
-        (do
-          (println (<! (step.semver/semver-tag-push remote)))
+        (let [res (<! (step.semver/semver-tag-push remote))]
+          (when (some? res)
+            (println res))
           (>! ch {:code 0}))
         (>! ch {:code 1
                 :message "'remote' is required."}))
