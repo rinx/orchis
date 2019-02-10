@@ -1,6 +1,7 @@
 (ns orchis.step.semver
   (:require [cljs.nodejs :as nodejs]
             [cljs.core.async :refer [chan <! >!] :as async]
+            [clojure.string :as string]
             [orchis.command.git :as command.git])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -50,9 +51,8 @@
   (let [ch (chan)]
     (go
       (let [{out :out err :err} (<! (command.git/latest-tag))]
-        (if (and (nil? err) (some? out))
-          (>! ch out)
-          (println "err: " err)) ;; TODO: logging
+        (when (and (nil? err) (some? out))
+          (>! ch out))
         (async/close! ch)))
     ch))
 
@@ -67,7 +67,9 @@
   (let [ch (chan)]
     (go
       (let [latest-log (<! (command.git/latest-log))
-            latest-tag (or (<! (fetch-latest-tag)) default-version-str)
+            latest-tag (-> (<! (fetch-latest-tag))
+                           (or default-version-str)
+                           (string/trim-newline))
             version (str->version latest-tag)
             latest-log-msg (get latest-log :message)
             new-version (new-version latest-log-msg version)]
@@ -84,9 +86,8 @@
       (let [new-version (<! (semver))]
         (when new-version
           (let [{out :out err :err} (<! (command.git/tag new-version))]
-            (if (and (nil? err) (some? out))
-              (>! ch out)
-              (println "err: " err))))
+            (when (and (nil? err) (some? out))
+              (>! ch out))))
         (async/close! ch)))
     ch))
 
@@ -96,9 +97,8 @@
       (let [{out :out err :err} (<! (semver-tag))]
         (when out
           (let [{out :out err :err} (<! (command.git/push-tags remote))]
-            (if (and (nil? err) (some? out))
-              (>! ch out)
-              (println "err: " err))))
+            (when (and (nil? err) (some? out))
+              (>! ch out))))
         (async/close! ch)))
     ch))
 
@@ -110,6 +110,11 @@
   (go
     (println
       (or (<! (fetch-latest-tag)) default-version-str)))
+  (go
+    (println
+      (str->version
+        (string/trim-newline
+          (or (<! (fetch-latest-tag)) default-version-str)))))
   (go
     (println (<! (semver))))
   (go
