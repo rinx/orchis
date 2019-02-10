@@ -78,17 +78,26 @@
         (async/close! ch)))
     ch))
 
-(defn semver-tag-push [remote]
+(defn semver-tag []
   (let [ch (chan)]
     (go
       (let [new-version (<! (semver))]
         (when new-version
           (let [{out :out err :err} (<! (command.git/tag new-version))]
             (if (and (nil? err) (some? out))
-              (let [{out :out err :err} (<! (command.git/push-tags remote))]
-                (if (and (nil? err) (some? out))
-                  (>! ch out)
-                  (println "err: " err)))
+              (>! ch out)
+              (println "err: " err))))
+        (async/close! ch)))
+    ch))
+
+(defn semver-tag-push [remote]
+  (let [ch (chan)]
+    (go
+      (let [{out :out err :err} (<! (semver-tag))]
+        (when out
+          (let [{out :out err :err} (<! (command.git/push-tags remote))]
+            (if (and (nil? err) (some? out))
+              (>! ch out)
               (println "err: " err))))
         (async/close! ch)))
     ch))
@@ -102,4 +111,6 @@
     (println
       (or (<! (fetch-latest-tag)) default-version-str)))
   (go
-    (println (<! (semver)))))
+    (println (<! (semver))))
+  (go
+    (println (<! (semver-tag)))))
