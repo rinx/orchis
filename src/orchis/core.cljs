@@ -21,7 +21,10 @@
        (string/join "\n")))
 
 (def options-spec
-  [["-h" "--help" "Show usage"]])
+  [["-h" "--help" "Show usage"]
+   [nil "--remote" "remote [default: origin]"
+    :id :remote
+    :default "origin"]])
 
 (defn exit [exitcode message]
   (when (some? message) (println message))
@@ -43,7 +46,7 @@
         (= subcommand "semver-tag") (runsc
                                       (<! (subcommand/semver-tag)))
         (= subcommand "semver-tag-push") (runsc
-                                           (<! (subcommand/semver-tag-push sargs)))
+                                           (<! (subcommand/semver-tag-push options)))
         :else (exit 1 (usage summary))))))
 
 (defn -main []

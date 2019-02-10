@@ -24,13 +24,13 @@
 
 (defn semver-tag-push [args]
   (let [ch (chan)
-        remote (first args)]
+        remote (get options :remote)]
     (go
       (if (some? remote)
         (do
           (println (<! (step.semver/semver-tag-push remote)))
           (>! ch {:code 0}))
         (>! ch {:code 1
-                :out "argument 'remote' is required."}))
+                :message "'remote' is required."}))
       (async/close! ch))
     ch))
