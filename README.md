@@ -6,22 +6,32 @@ It is named after [GP03](https://gundam.fandom.com/wiki/RX-78GP03_Gundam_%22Dend
 
 ## Usage
 
-    $ orchis run semver
-    $ orchis run gh-release
+    $ orchis semver
+    $ orchis simple-semver patch
+    $ orchis gh-release
     $ orchis run step1 -f orchis.edn
 
+or using docker image [rinx/orchis](https://hub.docker.com/r/rinx/orchis),
+
+    $ docker run -v `pwd`:/src -it rinx/orchis simple-semver patch
+    $ docker run -v `pwd`:/src -it rinx/orchis semver-tag-push
 
 ### steps
 
 #### builtin steps
 
 - semver
-- GitHub release
+- semver-tag
+- semver-tag-push
+- simple-semver
+- GitHub release (__not implemented yet__)
 
-builtin steps are written in ClojureScript or ShellScript.
+builtin steps can be written in ClojureScript.
 
 
 #### step configurations
+
+__not implemented yet.__
 
 Create `orchis.edn` file in your repository.
 
