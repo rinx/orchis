@@ -75,6 +75,14 @@
                 (standard-handler ch))))
     ch))
 
+(defn push-tags [remote]
+  (let [ch (chan)]
+    (go
+      (-> (simple-git cwd)
+          (.pushTags remote
+                (standard-handler ch))))
+    ch))
+
 (comment
   (go
     (println (<! (latest-log))))

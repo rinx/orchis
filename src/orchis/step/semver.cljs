@@ -52,7 +52,7 @@
       (let [{out :out err :err} (<! (command.git/latest-tag))]
         (if (and (nil? err) (some? out))
           (>! ch out)
-          (println "err:" err)) ;; TODO: logging
+          (println "err: " err)) ;; TODO: logging
         (async/close! ch)))
     ch))
 
@@ -71,26 +71,32 @@
             version (str->version latest-tag)
             latest-log-msg (get latest-log :message)
             new-version (new-version latest-log-msg version)]
-        (when-not (nil? new-version)
+        (when (some? new-version)
           (->> new-version
                (version->str)
                (>! ch)))
         (async/close! ch)))
     ch))
 
-(defn semver-tag-push []
+(defn semver-tag-push [remote]
   (let [ch (chan)]
     (go
       (let [new-version (<! (semver))]
         (when new-version
-          )
+          (let [{out :out err :err} (<! (command.git/tag new-version))]
+            (if (and (nil? err) (some? out))
+              (let [{out :out err :err} (<! (command.git/push-tags remote))]
+                (if (and (nil? err) (some? out))
+                  (>! ch out)
+                  (println "err: " err)))
+              (println "err: " err))))
         (async/close! ch)))
     ch))
 
 (comment
   (str->version "1.2.3")
   (version->str {:major 1 :minor 2 :patch 3})
-  (go (println (get :message (<! (command.git/latest-log)))))
+  (go (println (get (<! (command.git/latest-log)) :message)))
   (go (println (<! (fetch-latest-tag))))
   (go
     (println
