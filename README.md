@@ -28,6 +28,35 @@ or using docker image [rinx/orchis](https://hub.docker.com/r/rinx/orchis),
 
 builtin steps can be written in ClojureScript.
 
+##### semver
+
+It returns bumped version string along with commit comment contexts automatically.
+It is realized by regex matching for commit comments.
+If the comment contains "[patch]" or "[PATCH]" strings, it gives incremented version. (eg. 0.0.1 -> 0.0.2)
+Also, "[minor]" and "[MINOR]" for minor updates, "[major]" and "[MAJOR]" for major updates are supported.
+On the future work, it will be customizable by given CLI options.
+
+##### semver-tag
+
+Same as `semver`, it will bump git tag.
+
+##### semver-tag-push
+
+Same as `semver-tag`, it will push bumped tags to remote.
+
+##### simple-semver
+
+It return incremented version string you specified.
+
+eg.
+
+    $ orchis simple-semver patch
+    $ orchis simple-semver minor
+    $ orchis simple-semver major
+
+##### GitHub release (`gh-release`)
+
+
 
 #### step configurations
 
