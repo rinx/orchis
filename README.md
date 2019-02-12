@@ -1,4 +1,4 @@
-# orchis
+# orchis [![CircleCI](https://circleci.com/gh/rinx/orchis/tree/master.svg?style=svg)](https://circleci.com/gh/rinx/orchis/tree/master)
 
 Orchis is a tool for storing various types of "weapons" for CI/CD platforms.
 It is named after [GP03](https://gundam.fandom.com/wiki/RX-78GP03_Gundam_%22Dendrobium%22)'s armed base.
@@ -30,10 +30,10 @@ builtin steps can be written in ClojureScript.
 
 ##### semver
 
-It returns bumped version string along with commit comment contexts automatically.
+It returns the bumped version string along with contexts of the commit comments automatically.
 It is realized by regex matching for commit comments.
-If the comment contains "[patch]" or "[PATCH]" strings, it gives incremented version. (eg. 0.0.1 -> 0.0.2)
-Also, "[minor]" and "[MINOR]" for minor updates, "[major]" and "[MAJOR]" for major updates are supported.
+If the comment contains "[patch]" or "[PATCH]" strings, it gives incremented version (eg. 0.0.1 -> 0.0.2).
+Also, "[minor]" or "[MINOR]" for minor updates, "[major]" or "[MAJOR]" for major updates are supported.
 On the future work, it will be customizable by given CLI options.
 
 ##### semver-tag
