@@ -19,9 +19,12 @@
             [org.bodil/lein-noderepl "0.1.11"]]
 
   :npm {:dependencies [[source-map-support "0.4.0"]
-                       [simple-git "1.107.0"]]
-        :devDependencies [[pkg "4.3.7"]]
+                       [simple-git "1.107.0"]
+                       ["@octokit/rest" "16.15.0"]]
+        :devDependencies [[pkg "4.3.7"]
+                          [nexe "2.0.0-rc.34"]]
         :package {:scripts {:pkg "pkg -t node10-linux-x64 -c package-lock.json build/main.js"
+                            :pkg-alpine "pkg -t node10-alpine-x64 -c package-lock.json build/main.js"
                             :pkg-win "pkg -t node10-win-x64 -c package-lock.json build/main.js"
                             :pkg-mac "pkg -t node10-macos-x64 -c package-lock.json build/main.js"}}}
 
@@ -30,7 +33,11 @@
             "pkg" ["do"
                    ["npm" "install"]
                    "build"
-                   ["npm" "run" "pkg"]]}
+                   ["npm" "run" "pkg"]]
+            "pkg-alpine" ["do"
+                          ["npm" "install"]
+                          "build"
+                          ["npm" "run" "pkg-alpine"]]}
 
   :cljsbuild {:builds [{:id "main"
                         :source-paths ["src"]
