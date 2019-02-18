@@ -3,6 +3,9 @@
 Orchis is a tool for storing various types of "weapons" for CI/CD platforms.
 It is named after [GP03](https://gundam.fandom.com/wiki/RX-78GP03_Gundam_%22Dendrobium%22)'s armed base.
 
+## Requirements
+
+- `git`
 
 ## Usage
 
