@@ -94,7 +94,7 @@
 (defn semver-tag-push [remote]
   (let [ch (chan)]
     (go
-      (let [{new-version :out err :err} (<! (semver-tag))]
+      (let [new-version (<! (semver-tag))]
         (when new-version
           (let [{out :out err :err} (<! (command.git/push-tags remote))]
             (when (and (nil? err) (some? out))
