@@ -27,7 +27,7 @@ or using docker image [rinx/orchis](https://hub.docker.com/r/rinx/orchis),
 - semver-tag
 - semver-tag-push
 - simple-semver
-- GitHub release (__not implemented yet__)
+- GitHub release
 
 builtin steps can be written in ClojureScript.
 
@@ -59,6 +59,7 @@ eg.
 
 ##### GitHub release (`gh-release`)
 
+It create a new GitHub release from the latest tag.
 
 
 #### step configurations

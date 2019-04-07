@@ -23,6 +23,14 @@
         (.catch (fn [err] (async/put! ch {:error (js->clj err)}))))
     ch))
 
+(defn github-release [url token {:keys [owner repo tag-name]}]
+  (-> (octokit url token)
+      (.-repos)
+      (.createRelease (clj->js {:owner owner
+                                :repo repo
+                                :tag_name tag-name}))
+      (await)))
+
 (comment
   (go
     (-> (octokit "https://api.github.com")
