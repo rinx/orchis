@@ -4,10 +4,12 @@ alias:
     docker:
       - image: circleci/clojure:lein-node
         environment:
-          REPO_NAME: "rinx"
-          IMAGE_NAME: "orchis"
           GITHUB_API: "https://api.github.com/"
+          OWNER_NAME: "rinx"
+          REPO_NAME: "orchis"
           DOCKER_USER: "rinx"
+          DOCKER_REPO_NAME: "rinx"
+          IMAGE_NAME: "orchis"
   setup_remote_docker: &setup_remote_docker
     version: 18.06.0-ce
     docker_layer_caching: true
@@ -26,12 +28,12 @@ jobs:
       - run:
           name: docker image build
           command: |
-            # env DOCKER_BUILDKIT=1 docker build -t ${REPO_NAME}/${IMAGE_NAME}:latest .
-            docker build -t ${REPO_NAME}/${IMAGE_NAME}:latest .
+            # env DOCKER_BUILDKIT=1 docker build -t ${DOCKER_REPO_NAME}/${IMAGE_NAME}:latest .
+            docker build -t ${DOCKER_REPO_NAME}/${IMAGE_NAME}:latest .
       - run:
           name: save image
           command: |
-            docker image save ${REPO_NAME}/${IMAGE_NAME}:latest > ./docker-image.tar
+            docker image save ${DOCKER_REPO_NAME}/${IMAGE_NAME}:latest > ./docker-image.tar
       - persist_to_workspace:
           root: .
           paths:
@@ -49,7 +51,7 @@ jobs:
       - run:
           name: tag to latest
           command: |
-            docker tag ${REPO_NAME}/${IMAGE_NAME}:latest ${REPO_NAME}/${IMAGE_NAME}:nightly
+            docker tag ${DOCKER_REPO_NAME}/${IMAGE_NAME}:latest ${DOCKER_REPO_NAME}/${IMAGE_NAME}:nightly
       - run:
           name: docker login
           command: |
@@ -57,7 +59,7 @@ jobs:
       - run:
           name: push image to registory
           command: |
-            docker push ${REPO_NAME}/${IMAGE_NAME}
+            docker push ${DOCKER_REPO_NAME}/${IMAGE_NAME}
   publish:
     <<: *default
     steps:
@@ -71,7 +73,7 @@ jobs:
       - run:
           name: tag to latest
           command: |
-            docker tag ${REPO_NAME}/${IMAGE_NAME}:latest ${REPO_NAME}/${IMAGE_NAME}:$CIRCLE_TAG
+            docker tag ${DOCKER_REPO_NAME}/${IMAGE_NAME}:latest ${DOCKER_REPO_NAME}/${IMAGE_NAME}:$CIRCLE_TAG
       - run:
           name: docker login
           command: |
@@ -83,11 +85,17 @@ jobs:
   versioning:
     <<: *default
     steps:
+      - setup_remote_docker: *setup_remote_docker
       - checkout
       - run:
-          name: check
+          name: semver-tag-push-release
           command: |
-            echo "not implemented yet..."
+            NEW_VERSION=`docker run -v /tmp/orchis:/src -it rinx/orchis:latest semver-tag-push`
+            if [ -n $NEW_VERSION ]; then
+              docker run -v /tmp/orchis:/src -it rinx/orchis:latest gh-release \
+              --github-api-url=${GITHUB_API} --github-api-token=${GITHUB_TOKEN} \
+              --github-owner=${OWNER_NAME} --github-repo=${REPO_NAME}
+            fi
 
 workflows:
   version: 2
