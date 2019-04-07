@@ -1,6 +1,6 @@
 (defproject orchis "0.1.0-SNAPSHOT"
-  :description "FIXME"
-  :url "https://github.com/YOURNAME/orchis"
+  :description "A tool for storing various types of weapons for CI/CD platforms."
+  :url "https://github.com/rinx/orchis"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 

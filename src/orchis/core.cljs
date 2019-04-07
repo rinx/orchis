@@ -18,11 +18,29 @@
         "  semver             commit-comment based semantic versioning"
         "  semver-tag         semver and tagging"
         "  semver-tag-push    semver, tagging and pushtags"
-        "  simple-semver      simply returns bumped version"]
+        "  simple-semver      simply returns bumped version"
+        "  gh-release         create a release from latest tag"]
        (string/join "\n")))
 
 (def options-spec
-  [["-h" "--help" "Show usage"]
+  [["-h" "--help" "Show usage"
+    :id :help
+    :default false]
+   ["-j" "--json" "print results in JSON format"
+    :id :json
+    :default false]
+   [nil "--github-api-token" "GitHub API token"
+    :id :github-api-token
+    :default nil]
+   [nil "--github-api-url" "GitHub API URL [default: https://api.github.com]"
+    :id :github-api-url
+    :default "https://api.github.com"]
+   [nil "--github-owner" "GitHub user or org name"
+    :id :github-owner
+    :default nil]
+   [nil "--github-repo" "GitHub repository name"
+    :id :github-repo
+    :default nil]
    [nil "--remote" "remote [default: origin]"
     :id :remote
     :default "origin"]])
@@ -50,6 +68,8 @@
                                            (<! (subcommand/semver-tag-push options)))
         (= subcommand "simple-semver") (runsc
                                          (<! (subcommand/simple-semver sargs)))
+        (= subcommand "gh-release") (runsc
+                                      (<! (subcommand/gh-release options)))
         :else (exit 1 (usage summary))))))
 
 (defn -main []
