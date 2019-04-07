@@ -90,6 +90,7 @@ jobs:
       - run:
           name: semver-tag-push-release
           command: |
+            docker pull rinx/orchis
             NEW_VERSION=`docker run -v /tmp/orchis:/src -it rinx/orchis semver-tag`
             if [[ -n $NEW_VERSION ]]; then
               git push --tags
