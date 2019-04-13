@@ -12,6 +12,7 @@
                  [org.clojure/core.async "0.4.490"]
                  [io.nervous/cljs-nodejs-externs "0.2.0"]
                  [org.clojure/tools.cli "0.4.1"]
+                 [cljs-http "0.1.45"]
                  [com.taoensso/timbre "4.10.0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
@@ -20,7 +21,7 @@
 
   :npm {:dependencies [[source-map-support "0.4.0"]
                        [simple-git "1.107.0"]
-                       ["@octokit/rest" "16.15.0"]]
+                       [xhr2 "latest"]]
         :devDependencies [[pkg "4.3.7"]
                           [nexe "2.0.0-rc.34"]]
         :package {:scripts {:pkg "pkg -t node10-linux-x64 -c package-lock.json build/main.js"

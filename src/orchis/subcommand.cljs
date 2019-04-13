@@ -68,8 +68,7 @@
     (go
       (if (and (some? token) (some? url)
                (some? owner) (some? repo))
-        (let [res (<! (step.github/github-release
-                        url token owner repo))]
+        (let [res (<! (step.github/github-release url token owner repo))]
           (when (some? res)
             (println res))
           (>! ch {:code 0}))
