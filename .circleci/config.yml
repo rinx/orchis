@@ -4,7 +4,7 @@ alias:
     docker:
       - image: circleci/clojure:lein-node
         environment:
-          GITHUB_API: "https://api.github.com/"
+          GITHUB_API: "https://api.github.com"
           OWNER_NAME: "rinx"
           REPO_NAME: "orchis"
           DOCKER_USER: "rinx"
@@ -81,7 +81,7 @@ jobs:
       - run:
           name: push image to registory
           command: |
-            docker push ${REPO_NAME}/${IMAGE_NAME}
+            docker push ${DOCKER_REPO_NAME}/${IMAGE_NAME}
   versioning:
     <<: *default
     steps:
