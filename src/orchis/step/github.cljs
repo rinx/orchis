@@ -1,14 +1,12 @@
 (ns orchis.step.github
   (:require [cljs.nodejs :as nodejs]
             [cljs.core.async :refer [chan <! >!] :as async]
+            [clojure.string :as string]
             [orchis.command.git :as command.git]
-            [orchis.command.octokit :as command.octokit]
-            [clojure.string :as string])
+            [orchis.command.github :as command.github])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-(defn github-release
-  "Release the latest tag"
-  [url token owner repo]
+(defn github-release [url token owner repo]
   (let [ch (chan)]
     (go
       (let [{:keys [out err]} (<! (command.git/latest-tag))]
@@ -17,7 +15,7 @@
                 params {:owner owner
                         :repo repo
                         :tag-name latest-tag}
-                {:keys [result error]} (<! (command.octokit/github-release
+                {:keys [result error]} (<! (command.github/github-release
                                              url token params))]
             (when (and (nil? error) (some? result))
               (>! ch result)))))

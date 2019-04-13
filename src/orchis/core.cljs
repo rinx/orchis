@@ -8,6 +8,8 @@
 
 (nodejs/enable-util-print!)
 
+(set! js/XMLHttpRequest (nodejs/require "xhr2"))
+
 (defn usage [options-summary]
   (->> ["Usage: orchis subcommand [options]"
         ""
@@ -29,19 +31,16 @@
    ["-j" "--json" "print results in JSON format"
     :id :json
     :default false]
-   [nil "--github-api-token" "GitHub API token"
-    :id :github-api-token
-    :default nil]
-   [nil "--github-api-url" "GitHub API URL [default: https://api.github.com]"
+   [nil "--github-api-token TOKEN" "GitHub API token"
+    :id :github-api-token]
+   [nil "--github-api-url URL" "GitHub API URL"
     :id :github-api-url
     :default "https://api.github.com"]
-   [nil "--github-owner" "GitHub user or org name"
-    :id :github-owner
-    :default nil]
-   [nil "--github-repo" "GitHub repository name"
-    :id :github-repo
-    :default nil]
-   [nil "--remote" "remote [default: origin]"
+   [nil "--github-owner OWNER" "GitHub user or org name"
+    :id :github-owner]
+   [nil "--github-repo REPO" "GitHub repository name"
+    :id :github-repo]
+   [nil "--remote REMOTE" "remote"
     :id :remote
     :default "origin"]])
 
