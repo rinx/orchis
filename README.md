@@ -1,6 +1,8 @@
-# orchis [![CircleCI](https://circleci.com/gh/rinx/orchis/tree/master.svg?style=svg)](https://circleci.com/gh/rinx/orchis/tree/master)
+# orchis
+[![CircleCI](https://circleci.com/gh/rinx/orchis/tree/master.svg?style=svg)](https://circleci.com/gh/rinx/orchis/tree/master)
+[![Docker Pulls](https://img.shields.io/docker/pulls/rinx/orchis.svg?style=flat-square)](https://hub.docker.com/r/rinx/orchis)
 
-Orchis is a tool for storing various types of "weapons" for CI/CD platforms.
+Orchis has various types of *weapons* for CI/CD platforms.
 It is named after [GP03](https://gundam.fandom.com/wiki/RX-78GP03_Gundam_%22Dendrobium%22)'s armed base.
 
 ## Requirements
@@ -12,12 +14,12 @@ It is named after [GP03](https://gundam.fandom.com/wiki/RX-78GP03_Gundam_%22Dend
     $ orchis semver
     $ orchis simple-semver patch
     $ orchis gh-release
-    $ orchis run step1 -f orchis.edn
+    $ orchis run step1 -f orchis.edn # not implemented yet
 
 or using docker image [rinx/orchis](https://hub.docker.com/r/rinx/orchis),
 
     $ docker run -v `pwd`:/src -it rinx/orchis simple-semver patch
-    $ docker run -v `pwd`:/src -it rinx/orchis semver-tag-push
+    $ docker run -v `pwd`:/src -v ${SSH_AUTH_SOCK}:/ssh-agent -e SSH_AUTH_SOCK=/ssh-agent -it rinx/orchis semver-tag-push
 
 ### steps
 
@@ -29,7 +31,7 @@ or using docker image [rinx/orchis](https://hub.docker.com/r/rinx/orchis),
 - simple-semver
 - GitHub release
 
-builtin steps can be written in ClojureScript.
+builtin steps are written in ClojureScript.
 
 ##### semver
 
@@ -49,7 +51,7 @@ Same as `semver-tag`, it will push bumped tags to remote.
 
 ##### simple-semver
 
-It return incremented version string you specified.
+It returns incremented version string you specified.
 
 eg.
 
@@ -59,7 +61,7 @@ eg.
 
 ##### GitHub release (`gh-release`)
 
-It create a new GitHub release from the latest tag.
+It creates a new GitHub release from the latest tag.
 
 
 #### step configurations
