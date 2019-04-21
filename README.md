@@ -1,5 +1,5 @@
 # orchis
-[![CircleCI](https://circleci.com/gh/rinx/orchis/tree/master.svg?style=svg)](https://circleci.com/gh/rinx/orchis/tree/master)
+[![CircleCI](https://circleci.com/gh/rinx/orchis/tree/master.svg?style=svg)](https://circleci.com/gh/rinx/orchis)
 [![Docker Pulls](https://img.shields.io/docker/pulls/rinx/orchis.svg?style=flat-square)](https://hub.docker.com/r/rinx/orchis)
 
 Orchis has various types of *weapons* for CI/CD platforms.

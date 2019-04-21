@@ -71,9 +71,13 @@ jobs:
           command: |
             docker load -i ./docker-image.tar
       - run:
-          name: tag to latest
+          name: tagging
           command: |
             docker tag ${DOCKER_REPO_NAME}/${IMAGE_NAME}:latest ${DOCKER_REPO_NAME}/${IMAGE_NAME}:$CIRCLE_TAG
+      - run:
+          name: tagging stable
+          command: |
+            docker tag ${DOCKER_REPO_NAME}/${IMAGE_NAME}:latest ${DOCKER_REPO_NAME}/${IMAGE_NAME}:stable
       - run:
           name: docker login
           command: |
