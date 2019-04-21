@@ -57,23 +57,37 @@
           (parse-opts args options-spec)
           subcommand (first (drop 2 arguments))
           sargs (drop 3 arguments)]
-      (cond
-        (get options :help) (exit 0 (usage summary))
-        (= subcommand "semver") (runsc
-                                  (<! (subcommand/semver)))
-        (= subcommand "semver-tag") (runsc
-                                      (<! (subcommand/semver-tag)))
-        (= subcommand "semver-tag-push") (runsc
-                                           (<! (subcommand/semver-tag-push options)))
-        (= subcommand "simple-semver") (runsc
-                                         (<! (subcommand/simple-semver sargs)))
-        (= subcommand "gh-release") (runsc
-                                      (<! (subcommand/gh-release options)))
-        :else (exit 1 (usage summary))))))
+      (try
+        (cond
+          (get options :help)
+          (exit 0 (usage summary))
+          (= subcommand "semver")
+          (runsc
+            (<! (subcommand/semver)))
+          (= subcommand "semver-tag")
+          (runsc
+            (<! (subcommand/semver-tag)))
+          (= subcommand "semver-tag-push")
+          (runsc
+            (<! (subcommand/semver-tag-push options)))
+          (= subcommand "simple-semver")
+          (runsc
+            (<! (subcommand/simple-semver sargs)))
+          (= subcommand "gh-release")
+          (runsc
+            (<! (subcommand/gh-release options)))
+          :else
+          (exit 1 (usage summary)))
+        (catch :default e
+          (if (:json options)
+            (->> {:status 1
+                  :error e}
+                 (clj->js)
+                 (.stringify js/JSON)
+                 (exit 0))
+            (exit 1 e)))))))
 
 (defn -main []
   (run (.-argv nodejs/process)))
 
 (set! *main-cli-fn* -main)
-
-
