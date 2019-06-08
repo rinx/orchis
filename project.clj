@@ -19,11 +19,11 @@
             [lein-npm "0.6.2"]
             [org.bodil/lein-noderepl "0.1.11"]]
 
-  :npm {:dependencies [[source-map-support "0.4.0"]
-                       [simple-git "1.107.0"]
+  :npm {:dependencies [[source-map-support "latest"]
+                       [simple-git "latest"]
                        [xhr2 "latest"]]
-        :devDependencies [[pkg "4.3.7"]
-                          [nexe "2.0.0-rc.34"]]
+        :devDependencies [[pkg "latest"]
+                          [nexe "latest"]]
         :package {:scripts {:pkg "pkg -t node10-linux-x64 -c package-lock.json build/main.js"
                             :pkg-alpine "pkg -t node10-alpine-x64 -c package-lock.json build/main.js"
                             :pkg-win "pkg -t node10-win-x64 -c package-lock.json build/main.js"
