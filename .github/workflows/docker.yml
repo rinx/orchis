@@ -7,12 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Build and publish to the registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: rinx/orchis
-        username: rinx
-        password: ${{ secrets.GITHUB_TOKEN }}
-        registry: docker.pkg.github.com
-        snapshot: true
-        pull_requests: true
+    - name: Build the Docker image
+      run: |
+        echo "Build docker image"
+        docker build -t rinx/orchis .
+    - name: login to GitHub package registry
+      run: |
+        echo "Login to GitHub package registry"
+        echo $GITHUB_TOKEN | docker login docker.pkg.github.com --username rinx --password-stdin
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: tag and push to GitHub package registry
+      run: |
+        echo "Push to GitHub package registry"
+        docker tag rinx/orchis docker.pkg.github.com/rinx/orchis:$GITHUB_SHA
+        docker push docker.pkg.github.com/rinx/orchis:$GITHUB_SHA
