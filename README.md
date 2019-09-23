@@ -1,8 +1,11 @@
 # orchis
+
 [![CircleCI](https://circleci.com/gh/rinx/orchis/tree/master.svg?style=svg)](https://circleci.com/gh/rinx/orchis)
 [![Docker Pulls](https://img.shields.io/docker/pulls/rinx/orchis.svg?style=flat-square)](https://hub.docker.com/r/rinx/orchis)
+[![GitHub Actions: Build docker image](https://github.com/rinx/orchis/workflows/Build%20docker%20image/badge.svg)](https://github.com/rinx/orchis/actions)
 
-Orchis has various types of *weapons* for CI/CD platforms.
+Orchis has various types of _weapons_ for CI/CD platforms.
+
 It is named after [GP03](https://gundam.fandom.com/wiki/RX-78GP03_Gundam_%22Dendrobium%22)'s armed base.
 
 ## Requirements
@@ -63,10 +66,9 @@ eg.
 
 It creates a new GitHub release from the latest tag.
 
-
 #### step configurations
 
-__not implemented yet.__
+**not implemented yet.**
 
 Create `orchis.edn` file in your repository.
 
@@ -91,7 +93,6 @@ Create `orchis.edn` file in your repository.
            [:builtin :github-release]]}}}
 ```
 
-
 ### target platforms
 
 - Google Cloud Build
@@ -99,11 +100,9 @@ Create `orchis.edn` file in your repository.
 - Drone.io
 - Screwdriver.cd
 
-
 ## Packaging using `pkg`
 
     $ lein pkg
-
 
 ## Development
 
@@ -126,4 +125,3 @@ or
     user=> (dev)
     ClojureScript 1.10.439
     cljs.user=>
-
