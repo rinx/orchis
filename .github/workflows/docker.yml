@@ -16,7 +16,7 @@ jobs:
         echo "Login to GitHub package registry"
         echo ${GITHUB_TOKEN} | docker login docker.pkg.github.com --username rinx --password-stdin
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ORCHIS_TOKEN }}
     - name: tag and push to GitHub package registry
       run: |
         echo "Push to GitHub package registry"
