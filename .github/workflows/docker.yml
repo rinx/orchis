@@ -14,11 +14,11 @@ jobs:
     - name: login to GitHub package registry
       run: |
         echo "Login to GitHub package registry"
-        echo $GITHUB_TOKEN | docker login docker.pkg.github.com --username rinx --password-stdin
+        echo ${GITHUB_TOKEN} | docker login docker.pkg.github.com --username rinx --password-stdin
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: tag and push to GitHub package registry
       run: |
         echo "Push to GitHub package registry"
-        docker tag rinx/orchis docker.pkg.github.com/rinx/orchis:$GITHUB_SHA
-        docker push docker.pkg.github.com/rinx/orchis:$GITHUB_SHA
+        docker tag rinx/orchis docker.pkg.github.com/rinx/orchis:${GITHUB_SHA}
+        docker push docker.pkg.github.com/rinx/orchis:${GITHUB_SHA}
