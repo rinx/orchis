@@ -20,5 +20,5 @@ jobs:
     - name: tag and push to GitHub package registry
       run: |
         echo "Push to GitHub package registry"
-        docker tag rinx/orchis docker.pkg.github.com/rinx/orchis:${GITHUB_SHA}
-        docker push docker.pkg.github.com/rinx/orchis:${GITHUB_SHA}
+        docker tag rinx/orchis docker.pkg.github.com/rinx/orchis/rinx/orchis:${GITHUB_SHA}
+        docker push docker.pkg.github.com/rinx/orchis/rinx/orchis:${GITHUB_SHA}
